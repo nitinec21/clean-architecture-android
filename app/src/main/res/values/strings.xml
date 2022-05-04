@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Clean Architecture Android</string>
+    <string name="movie_info">Movie Info</string>
+    <string name="released_at">Released at:</string>
+    <string name="rating">Rating:</string>
+    <string name="movie_poster">Movie poster</string>
+    <string name="title_popular_movies">Popular Movies</string>
+    <string name="title_movie_details">Movie Details</string>
+    <string name="http_error_msg">An unexpected error occurred</string>
+    <string name="io_error_msg">Couldn\'t reach server. Check your internet connection.</string>
+    <string name="general_error_msg">An unexpected error occurred</string>
+</resources>
