@@ -12,6 +12,7 @@ A Simple Android Mobile Application which has been implemented using MVVM Clean 
 - Dagger Hilt
 - Retrofit2
 - Navigation Architecture Component
+- Unit tests
 
 
 ## Screenshots
@@ -22,7 +23,7 @@ A Simple Android Mobile Application which has been implemented using MVVM Clean 
 
 ## API Key 🔑
 
-You will need to provide developer key to fetch the data from TMDB API.
+You will need to provide API key to fetch the data from TMDB API.
 
 - Generate a new key (v3 auth) from https://www.themoviedb.org/settings/api. 
 - Copy the key and put it in local.properties file with key TMDB_API_KEY.
