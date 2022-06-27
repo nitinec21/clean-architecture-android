@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,7 +43,7 @@ class MovieDetailsViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when use case returns success then resource returned should be success`() {
-        testCoroutineRule.runBlockingTest {
+        runTest {
             every { apiObserver.onChanged(any()) } answers { }
             every { getMovieDetailsUseCase(1) } returns flow { emit(Resource.Success(MovieDetails())) }
 
@@ -61,7 +62,7 @@ class MovieDetailsViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when use case returns error then resource returned should be error`() {
-        testCoroutineRule.runBlockingTest {
+        runTest {
             every { apiObserver.onChanged(any()) } answers { }
             every { getMovieDetailsUseCase(1) } returns flow { emit(Resource.Error("Some error")) }
 

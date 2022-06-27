@@ -12,6 +12,7 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.runTest
 
 import org.junit.Before
 import org.junit.Rule
@@ -42,7 +43,7 @@ class PopularMoviesViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when use case returns success then resource should be success`() {
-        testCoroutineRule.runBlockingTest {
+        runTest {
             every { apiObserver.onChanged(any()) } answers { }
             every { getPopularMoviesUseCase() } returns flow { emit(Resource.Success(listOf())) }
 
@@ -63,7 +64,7 @@ class PopularMoviesViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `when use case returns error then resource should be error`() {
-        testCoroutineRule.runBlockingTest {
+        runTest{
             every { apiObserver.onChanged(any()) } answers { }
             every { getPopularMoviesUseCase() } returns flow { emit(Resource.Error("Some error")) }
 
