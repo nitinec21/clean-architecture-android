@@ -1,25 +1,20 @@
 package com.example.cleanarchitectureandroid.domain.use_case.get_popular_movies
 
-import android.content.Context
 import com.example.cleanarchitectureandroid.common.Resource
-import com.example.cleanarchitectureandroid.data.remote.model.MovieResponse
+import com.example.cleanarchitectureandroid.common.UiText
 import com.example.cleanarchitectureandroid.domain.repository.MovieRepository
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
-import java.io.IOException
 
 class GetPopularMoviesUseCaseTest {
-
-    @MockK
-    lateinit var context: Context
 
     @MockK
     lateinit var repository: MovieRepository
@@ -29,7 +24,7 @@ class GetPopularMoviesUseCaseTest {
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        getPopularMoviesUseCase = GetPopularMoviesUseCase(context, repository)
+        getPopularMoviesUseCase = GetPopularMoviesUseCase(repository)
     }
 
     @Test
@@ -70,11 +65,15 @@ class GetPopularMoviesUseCaseTest {
     }
 
     private fun mockSuccess() {
-        coEvery { repository.getPopularMovies() } returns MovieResponse(1, listOf(), 1, 1)
+        coEvery { repository.getPopularMovies() } returns flow {
+            emit(Resource.Loading())
+            emit(Resource.Success(listOf())) }
     }
 
     private fun mockError() {
-        coEvery { repository.getPopularMovies() } throws IOException("error occurred")
-        every { context.getString(any()) } returns "Test message"
+        coEvery { repository.getPopularMovies() } returns flow {
+            emit(Resource.Loading())
+            emit(Resource.Error(UiText.unknownError()))
+        }
     }
 }

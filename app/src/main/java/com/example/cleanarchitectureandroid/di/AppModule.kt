@@ -2,6 +2,8 @@ package com.example.cleanarchitectureandroid.di
 
 import com.example.cleanarchitectureandroid.BuildConfig
 import com.example.cleanarchitectureandroid.common.Constants
+import com.example.cleanarchitectureandroid.core.dispatchers.AppDispatcher
+import com.example.cleanarchitectureandroid.core.dispatchers.Dispatcher
 import com.example.cleanarchitectureandroid.data.remote.MovieApi
 import com.example.cleanarchitectureandroid.data.repository.MovieRepositoryImpl
 import com.example.cleanarchitectureandroid.domain.repository.MovieRepository
@@ -60,5 +62,11 @@ object AppModule {
     @Singleton
     fun provideMovieRepository(api: MovieApi): MovieRepository {
         return MovieRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAppDispatcher(): Dispatcher {
+        return AppDispatcher()
     }
 }

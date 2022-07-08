@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.cleanarchitectureandroid.R
@@ -16,6 +19,7 @@ import com.example.cleanarchitectureandroid.common.Resource
 import com.example.cleanarchitectureandroid.databinding.MovieFragmentBinding
 import com.example.cleanarchitectureandroid.domain.model.Movie
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieItemListener {
@@ -45,21 +49,25 @@ class PopularMoviesFragment : Fragment(), MoviesAdapter.MovieItemListener {
     }
 
     private fun setupObserver() {
-        viewModel.movies.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    binding.progressBar.visibility = View.GONE
-                    it.data?.let { moviesList -> renderList(moviesList) }
-                    binding.moviesRv.visibility = View.VISIBLE
-                }
-                is Resource.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.moviesRv.visibility = View.GONE
-                }
-                is Resource.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.errorTxt.visibility = View.VISIBLE
-                    binding.errorTxt.text = it.message
+        lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.movies.collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            it.data?.let { moviesList -> renderList(moviesList) }
+                            binding.moviesRv.visibility = View.VISIBLE
+                        }
+                        is Resource.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.moviesRv.visibility = View.GONE
+                        }
+                        is Resource.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.errorTxt.visibility = View.VISIBLE
+                            binding.errorTxt.text = it.uiText?.asString(requireContext()) ?: getString(R.string.error_unknown)
+                        }
+                    }
                 }
             }
         }

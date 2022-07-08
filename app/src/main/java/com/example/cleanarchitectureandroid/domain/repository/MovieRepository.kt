@@ -1,11 +1,13 @@
 package com.example.cleanarchitectureandroid.domain.repository
 
-import com.example.cleanarchitectureandroid.data.remote.model.MovieDetailsDto
-import com.example.cleanarchitectureandroid.data.remote.model.MovieResponse
+import com.example.cleanarchitectureandroid.common.Resource
+import com.example.cleanarchitectureandroid.domain.model.Movie
+import com.example.cleanarchitectureandroid.domain.model.MovieDetails
+import kotlinx.coroutines.flow.Flow
 
 interface MovieRepository {
 
-    suspend fun getPopularMovies(): MovieResponse
+    suspend fun getPopularMovies(): Flow<Resource<List<Movie>>>
 
-    suspend fun getMovieDetails(movieId: Int): MovieDetailsDto
+    suspend fun getMovieDetails(movieId: Int): Flow<Resource<MovieDetails>>
 }
